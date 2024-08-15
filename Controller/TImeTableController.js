@@ -19,7 +19,6 @@ export const createTimetable = async (req, res) => {
 export const getAllTimetables = async (req, res) => {
   try {
     const timetables = await DailyTimetable.find();
-    console.log(timetables)
     res.status(200).json(timetables);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -31,7 +30,6 @@ export const getTimetableById = async (req, res) => {
   try {
   
     const {id}  = req.params
-   console.log(id)
     const timetable = await DailyTimetable.find({teacherId:id});
    
     if (!timetable) return res.status(404).json({ error: 'Timetable not found' });
@@ -46,7 +44,6 @@ export const getClassTimeTable = async (req, res) => {
   try {
   
     const {id}  = req.params
-   console.log(id)
     const timetable = await DailyTimetable.find({classroom:id});
    
     if (!timetable) return res.status(404).json({ error: 'Timetable not found' });
@@ -73,7 +70,6 @@ export const deleteTimetable = async (req, res) => {
   try {
     const { id } = req.params;
     
-    console.log(id); // This will log the id received from the request parameters
 
     // Correct usage: passing objectId directly to findByIdAndDelete
     const timetable = await DailyTimetable.findOneAndDelete({slotId:id});

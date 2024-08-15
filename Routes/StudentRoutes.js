@@ -10,7 +10,8 @@ import {
   getStudentById,
   updateStudent,
   deleteStudent,
-  studentLogin
+  studentLogin,
+  getStudentByClassName
 } from '../Controller/StudentController.js';
 import { verifyStudent, verifyTeacher } from "../Authentication/Auth.js";
 
@@ -22,7 +23,7 @@ const router = express.Router();
 // @route   POST /api/students
 // @desc    Create a new student
 // @access  Public
-router.post('/students',verifyTeacher,createStudent);
+router.post('/students',createStudent);
 router.post('/studentLogin',studentLogin)
 // @route   GET /api/students
 // @desc    Get all students
@@ -33,6 +34,13 @@ router.get('/students', getStudents);
 // @desc    Get a student by ID
 // @access  Public
 router.get('/students/:id',verifyStudent,getStudentById);
+
+
+
+
+
+router.get('/studentsByClassName/:className',verifyStudent,getStudentByClassName);
+
 
 // @route   PUT /api/students/:id
 // @desc    Update a student by ID

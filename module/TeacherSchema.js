@@ -8,7 +8,8 @@ const teacherSchema = new mongoose.Schema({
   },
   teacherId:{
     type: String,
-    required: true
+    required: true,
+    unique:true
   },
   age: {
     type: Number,

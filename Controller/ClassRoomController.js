@@ -3,7 +3,7 @@ import ClassRoom from '../module/ClassRoomSchema.js';
 // Create a new classroom
 export const createClassRoom = async (req, res) => {
   try {
-    const { className, totalSeats, seatAvailable, seatOccupied, classTeacher, timeTableId, startTime, endTime } = req.body;
+    const { className, totalSeats, seatAvailable, seatOccupied, classTeacher, timeTableId, startTime, endTime,section } = req.body;
 console.log(req.body)
     const newClassRoom = new ClassRoom({
       className,
@@ -13,7 +13,8 @@ console.log(req.body)
       classTeacher,
       timeTableId,
       startTime,
-      endTime
+      endTime,
+      section
     });
 
     await newClassRoom.save();
@@ -49,7 +50,8 @@ export const getClassRoomById = async (req, res) => {
 // Update a classroom by ID
 export const updateClassRoom = async (req, res) => {
   try {
-    const updatedClassRoom = await ClassRoom.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const {className}  = req.params
+    const updatedClassRoom = await ClassRoom.findOneAndUpdate({className:className}, req.body, { new: true });
     if (!updatedClassRoom) return res.status(404).json({ message: 'ClassRoom not found' });
     res.status(200).json(updatedClassRoom);
   } catch (error) {

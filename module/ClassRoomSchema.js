@@ -5,6 +5,7 @@ const classRoomSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    unique:true
   },
   slotId:{
 type:String,
@@ -21,6 +22,16 @@ require:true
   endTime: {
     type: String, // Store as a string in HH:MM format
     required: true,
+  },
+  classTeacher: {
+    type: String, // Store as a string in HH:MM format
+  
+  },
+  section: {
+    type: String, 
+    required:true,
+    unique:true
+  
   },
   openDays: {
     mon: {

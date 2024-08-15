@@ -29,14 +29,14 @@ export const studentLogin = async (req, res) => {
     // Set the token in a cookie
     res.cookie('token', token, {
       maxAge: 9000000, // Cookie expiration time in milliseconds
-      httpOnly: true,
-      sameSite: 'None',
+      httpOnly: true, // Cookie cannot be accessed via JavaScript
+      sameSite: 'Lax', // Ensures cookies are sent with cross-origin requests
       secure: true, // Set to true if using HTTPS
       path: '/' // Path where the cookie is available
     });
 
     // Send a successful response with status code 200
-    res.status(202).json({ message: "Login successful" });
+    res.status(202).json("student "+ payload.user);
 
   } catch (error) {
     console.error(error);
@@ -45,9 +45,33 @@ export const studentLogin = async (req, res) => {
 };
 
 
+
+// Function to generate a unique 6-digit ID
+const generateUniqueId = async () => {
+  let uniqueId;
+  let isUnique = false;
+
+  while (!isUnique) {
+    // Generate a random 6-digit number as a string
+    uniqueId = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Check if this ID already exists in the database
+    const existingStudent = await Student.findOne({ studentId: uniqueId });
+    
+    if (!existingStudent) {
+      isUnique = true; // Exit loop if ID is unique
+    }
+  }
+
+  return uniqueId;
+};
+
 export const createStudent = async (req, res) => {
   try {
-    const { studentName, rollNo, age, studentClass,studentId } = req.body;
+    const { studentName, rollNo, age, studentClass } = req.body;
+
+    // Generate a unique student ID
+    const studentId = await generateUniqueId();
 
     const newStudent = new Student({
       studentName,
@@ -60,10 +84,11 @@ export const createStudent = async (req, res) => {
     const savedStudent = await newStudent.save();
     res.status(201).json(savedStudent);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(400).json({ message: error.message });
   }
 };
+
 
 // Get all students
 export const getStudents = async (req, res) => {
@@ -80,9 +105,23 @@ export const getStudents = async (req, res) => {
 // Get a single student by ID
 export const getStudentById = async (req, res) => {
   try {
-    const student = await Student.findById(req.params.id);
+    const {id} =req.params
+    const student = await Student.findOne({rollNo:id});
     if (!student) return res.status(404).json({ message: 'Student not found' });
     res.status(200).json(student);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+export const getStudentByClassName = async (req, res) => {
+  try {
+    const {className} =req.params
+    const students = await Student.find({studentClass:className});
+  
+    if (!students) return res.status(404).json({ message: 'Students not found' });
+    res.status(200).json(students);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -91,17 +130,18 @@ export const getStudentById = async (req, res) => {
 // Update a student by ID
 export const updateStudent = async (req, res) => {
   try {
-    const { studentName, rollNo, age, studentClass } = req.body;
-
-    const updatedStudent = await Student.findByIdAndUpdate(
-      req.params.id,
-      { studentName, rollNo, age, studentClass },
+    const { studentName, rollNo, age, studentClass,email,phone,address } = req.body;
+const {id} = req.params
+    const updatedStudent = await Student.findOneAndUpdate(
+{  rollNo:id},
+      { studentName, rollNo, age, studentClass,email,phone,address },
       { new: true, runValidators: true }
     );
 
     if (!updatedStudent) return res.status(404).json({ message: 'Student not found' });
     res.status(200).json(updatedStudent);
   } catch (error) {
+    console.log(error)
     res.status(400).json({ message: error.message });
   }
 };

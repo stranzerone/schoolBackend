@@ -11,12 +11,10 @@ export const teacherLogin =async(req,res)=>{
   try{
 
 const {teacherId,dateOfBirth} = req.body
-console.log(req.body)
 
 const teacher = await Teacher.findOne({teacherId:teacherId,dateOfBirth:dateOfBirth})
 
 if(teacher){
-  console.log("teacher found found",teacher)
 
   const payload = { user: teacherId, role: "teacher" };
   const options = { expiresIn: "2h" };
@@ -25,18 +23,18 @@ if(teacher){
   // Set the token in a cookie
   res.cookie('token', token, {
     maxAge: 9000000, // Cookie expiration time in milliseconds
-    httpOnly: true,
-    sameSite: 'None',
-    secure: true, // Set to true if using HTTPS
+    httpOnly: true, // Cookie cannot be accessed via JavaScript
+    sameSite: 'Strict', // Ensures cookies are sent with cross-origin requests
+    secure: false, // Set to true if using HTTPS
     path: '/' // Path where the cookie is available
   });
-  res.status(201).json("teacher  success")
+  res.status(201).json("teacher "+ payload.user)
 }
 
 
   }catch(error){
     console.error(error)
-    res.status(404).json("student not found")
+    res.status(404).json("teacher not found")
   }
 }
 
@@ -51,11 +49,9 @@ export const principalLogin =async(req,res)=>{
   try{
 
 const {username,password} = req.body
-console.log(req.body)
 
 
 if(username=="principal@classroom.com" && password=="Admin"){
-  console.log("teacher found found")
 
 
   const payload = { user: username, role: "principal" };
@@ -66,13 +62,13 @@ if(username=="principal@classroom.com" && password=="Admin"){
   res.cookie('token', token, {
     maxAge: 9000000, // Cookie expiration time in milliseconds
     httpOnly: true, // Cookie cannot be accessed via JavaScript
-    sameSite: 'Lax', // Ensures cookies are sent with cross-origin requests
-    secure: false, // Set to true if using HTTPS
+    sameSite: 'Lax', // Allows sending cookies with same-site requests and top-level cross-origin navigation
+    secure: true, // Set to true if using HTTPS; for localhost, it should be false
     path: '/' // Path where the cookie is available
   });
-  res.status(200).json("principal access foin success")
+  res.status(200).json("Principal+ "+ payload.user);
+  
 }
-
 
   }catch(error){
     console.error(error)
@@ -85,9 +81,26 @@ if(username=="principal@classroom.com" && password=="Admin"){
 
 
 
+
+// Function to generate a unique 4-digit teacherId
+const generateUniqueTeacherId = async () => {
+  let teacherId;
+  const existingTeacherIds = await Teacher.find().distinct('teacherId');
+  
+  do {
+    // Generate a random 4-digit number
+    teacherId = Math.floor(1000 + Math.random() * 9000).toString();
+  } while (existingTeacherIds.includes(teacherId)); // Ensure it's unique
+
+  return teacherId;
+};
+
 export const createTeacher = async (req, res) => {
   try {
-    const { teacherName, age, subject, salary, dateOfBirth,teacherId,className } = req.body;
+    const { teacherName, age, subject, salary, dateOfBirth, className } = req.body;
+
+    // Generate a unique teacherId
+    const teacherId = await generateUniqueTeacherId();
 
     const newTeacher = new Teacher({
       teacherName,
@@ -97,13 +110,12 @@ export const createTeacher = async (req, res) => {
       dateOfBirth,
       teacherId,
       className
-
     });
 
     await newTeacher.save();
     res.status(201).json(newTeacher);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };

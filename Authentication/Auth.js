@@ -1,18 +1,18 @@
 import jwt from 'jsonwebtoken';
 
 // Secret key should be the same as used in creating the token
-const secretKey = 'sahil';
+const secretKey = process.env.SECRET_KEY;
 
 const verifyRole = (allowedRoles) => (req, res, next) => {
   const token = req.cookies.token;
-
+console.log(token)
   if (!token) {
     return res.status(401).json({ message: 'No token provided' });
   }
 
   try {
     const decoded = jwt.verify(token, secretKey);
-    console.log(decoded, "token decoded");
+
 
     // Check if the user's role is allowed
     if (!allowedRoles.includes(decoded.role)) {

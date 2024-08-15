@@ -19,7 +19,7 @@ router.post('/', verifyPrincipal,createTimetable);
 // Route to get all timetables
 router.get('/',verifyStudent, getAllTimetables);
 //Route to get classs schedule
-router.get('/classTimeTable/:id',verifyStudent, getClassTimeTable);
+router.get('/classTimeTable/:id', getClassTimeTable);
 
 // Route to get a specific timetable by ID
 router.get('/:id', verifyStudent,getTimetableById);
