@@ -62,7 +62,7 @@ if(username=="principal@classroom.com" && password=="Admin"){
   res.cookie('token', token, {
     maxAge: 9000000, // Cookie expiration time in milliseconds
     httpOnly: true, // Cookie cannot be accessed via JavaScript
-    sameSite: 'Lax', // Allows sending cookies with same-site requests and top-level cross-origin navigation
+    sameSite: 'Strict', // Allows sending cookies with same-site requests and top-level cross-origin navigation
     secure: true, // Set to true if using HTTPS; for localhost, it should be false
     path: '/' // Path where the cookie is available
   });

@@ -30,7 +30,7 @@ export const studentLogin = async (req, res) => {
     res.cookie('token', token, {
       maxAge: 9000000, // Cookie expiration time in milliseconds
       httpOnly: true, // Cookie cannot be accessed via JavaScript
-      sameSite: 'Lax', // Ensures cookies are sent with cross-origin requests
+      sameSite: 'Strict', // Ensures cookies are sent with cross-origin requests
       secure: true, // Set to true if using HTTPS
       path: '/' // Path where the cookie is available
     });
