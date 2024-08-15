@@ -22,11 +22,11 @@ if(teacher){
 
   // Set the token in a cookie
   res.cookie('token', token, {
-    maxAge: 9000000, // Cookie expiration time in milliseconds
-    httpOnly: true, // Cookie cannot be accessed via JavaScript
-    sameSite: 'Strict', // Ensures cookies are sent with cross-origin requests
-    secure: true, // Set to true if using HTTPS
-    path: '/' // Path where the cookie is available
+    maxAge: 9000000,
+  httpOnly: true,
+  sameSite: 'None',
+  secure: true,
+  path:"/"
   });
   res.status(201).json("teacher "+ payload.user)
 }
@@ -59,12 +59,12 @@ if(username=="principal@classroom.com" && password=="Admin"){
   const token = jwt.sign(payload, secretKey, options);
 
   // Set the token in a cookie
-  res.cookie('token', token, {
-    maxAge: 9000000, // Cookie expiration time in milliseconds
-    httpOnly: true, // Cookie cannot be accessed via JavaScript
-    sameSite: 'Strict', // Allows sending cookies with same-site requests and top-level cross-origin navigation
-    secure: true, // Set to true if using HTTPS; for localhost, it should be false
-    path: '/' // Path where the cookie is available
+  res.cookie('token', token,{
+    maxAge: 9000000,
+  httpOnly: true,
+  sameSite: 'None',
+  secure: true,
+  path:"/"
   });
   res.status(200).json("Principal+ "+ payload.user);
   

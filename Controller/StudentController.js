@@ -28,11 +28,11 @@ export const studentLogin = async (req, res) => {
 
     // Set the token in a cookie
     res.cookie('token', token, {
-      maxAge: 9000000, // Cookie expiration time in milliseconds
-      httpOnly: true, // Cookie cannot be accessed via JavaScript
-      sameSite: 'Strict', // Ensures cookies are sent with cross-origin requests
-      secure: true, // Set to true if using HTTPS
-      path: '/' // Path where the cookie is available
+      maxAge: 9000000,
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+    path:'/'
     });
 
     // Send a successful response with status code 200
