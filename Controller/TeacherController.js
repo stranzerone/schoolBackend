@@ -25,7 +25,7 @@ if(teacher){
     maxAge: 9000000, // Cookie expiration time in milliseconds
     httpOnly: true, // Cookie cannot be accessed via JavaScript
     sameSite: 'Strict', // Ensures cookies are sent with cross-origin requests
-    secure: false, // Set to true if using HTTPS
+    secure: true, // Set to true if using HTTPS
     path: '/' // Path where the cookie is available
   });
   res.status(201).json("teacher "+ payload.user)
