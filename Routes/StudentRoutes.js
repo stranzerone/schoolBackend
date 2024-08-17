@@ -13,7 +13,7 @@ import {
   studentLogin,
   getStudentByClassName
 } from '../Controller/StudentController.js';
-import { verifyStudent, verifyTeacher } from "../Authentication/Auth.js";
+import { verifyPrincipal, verifyStudent, verifyTeacher } from "../Authentication/Auth.js";
 
 
 
@@ -23,7 +23,7 @@ const router = express.Router();
 // @route   POST /api/students
 // @desc    Create a new student
 // @access  Public
-router.post('/students',createStudent);
+router.post('/students',verifyPrincipal,createStudent);
 router.post('/studentLogin',studentLogin)
 // @route   GET /api/students
 // @desc    Get all students
@@ -50,7 +50,7 @@ router.put('/students/:id', verifyTeacher,updateStudent);
 // @route   DELETE /api/students/:id
 // @desc    Delete a student by ID
 // @access  Public
-router.delete('/students/:id',verifyTeacher,deleteStudent);
+router.delete('/students/:id',verifyPrincipal,deleteStudent);
 
 
 

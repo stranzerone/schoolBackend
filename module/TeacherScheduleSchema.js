@@ -11,8 +11,9 @@ const dailyTimetableSchema = new mongoose.Schema({
    
   },
   slotId:{
-   type: String, // Optional field for the classroom
-    required:true
+   type: String, 
+    required:true,
+   unique:true
   },
   date: {
     type: Date,

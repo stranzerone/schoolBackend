@@ -16,7 +16,7 @@ export const studentLogin = async (req, res) => {
     const student = await Student.findOne({ rollNo, studentId });
 
     if (!student) {
-      return res.status(404).json("Student not found");
+      return res.status(210).json("Invalid Credentials");
     }
 
     console.log("Student found", student);
@@ -28,11 +28,11 @@ export const studentLogin = async (req, res) => {
 
     // Set the token in a cookie
     res.cookie('token', token, {
-      maxAge: 9000000,
-    httpOnly: true,
-    sameSite: 'None',
-    secure: true,
-    path:'/'
+      maxAge: 9000000, // Cookie expiration time in milliseconds
+      httpOnly: true,
+      sameSite: 'None',
+      secure: true, // Set to true if using HTTPS
+      path: '/' // Path where the cookie is available
     });
 
     // Send a successful response with status code 200

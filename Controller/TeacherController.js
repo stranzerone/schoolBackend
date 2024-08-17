@@ -22,13 +22,15 @@ if(teacher){
 
   // Set the token in a cookie
   res.cookie('token', token, {
-    maxAge: 9000000,
-  httpOnly: true,
-  sameSite: 'None',
-  secure: true,
-  path:"/"
+    maxAge: 9000000, // Cookie expiration time in milliseconds
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,// Set to true if using HTTPS
+    path: '/' // Path where the cookie is available
   });
   res.status(201).json("teacher "+ payload.user)
+}else{
+    res.status(210).json("Invalid Credentials")
 }
 
 
@@ -59,15 +61,19 @@ if(username=="principal@classroom.com" && password=="Admin"){
   const token = jwt.sign(payload, secretKey, options);
 
   // Set the token in a cookie
-  res.cookie('token', token,{
-    maxAge: 9000000,
-  httpOnly: true,
-  sameSite: 'None',
-  secure: true,
-  path:"/"
+  res.cookie('token', token, {
+    maxAge: 9000000, // Cookie expiration time in milliseconds
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true, // Set to true if using HTTPS; for localhost, it should be false
+    path: '/' // Path where the cookie is available
   });
+
   res.status(200).json("Principal+ "+ payload.user);
   
+}else{
+  res.status(210).json("Invalid Credentials");
+
 }
 
   }catch(error){

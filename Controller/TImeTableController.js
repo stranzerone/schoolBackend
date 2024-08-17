@@ -5,11 +5,16 @@ import DailyTimetable from '../module/TeacherScheduleSchema.js'; // Adjust the i
 export const createTimetable = async (req, res) => {
   try {
     const data = req.body
-    const slotId = data.classroom+data.teacherId+data.startTime;
-    const timetable = new DailyTimetable({slotId:slotId,teacherId:data.teacherId,classroom:data.classroom,startTime:data.startTime,endTime:data.startTime,subject:data.subject,teacherName:data.teacherName});
-    await timetable.save();
-    
-    res.status(201).json(timetable);
+    const slotId =( data.classroom+data.teacherId+data.startTime).trim();
+    const timetable = new DailyTimetable({slotId:slotId,teacherId:data.teacherId,classroom:data.classroom,startTime:data.startTime,endTime:data.endTime,subject:data.subject,teacherName:data.teacherName});
+    const saved = await timetable.save();
+    if(saved){
+      res.status(201).json(timetable);
+
+    }else{
+      res.status(210).json("Teacher does not have off period");
+
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
